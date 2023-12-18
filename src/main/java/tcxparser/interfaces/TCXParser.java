@@ -1,4 +1,4 @@
-package tcxparser;
+package tcxparser.interfaces;
 
 import tcxparser.entity.TrackPoint;
 

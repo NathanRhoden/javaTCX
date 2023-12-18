@@ -1,4 +1,5 @@
 import tcxparser.Parser;
+import tcxparser.Tcx;
 import tcxparser.entity.TrackPoint;
 
 import javax.xml.stream.XMLStreamException;
@@ -11,10 +12,14 @@ public class Main {
 
         File file = new File("src/main/resources/tteffort.tcx");
         File invalid = new File("src/main/resources/invalid.gpx");
+        File trackNoHR = new File("src/main/resources/track.tcx");
 
         Parser parser = new Parser(file);
 
         var trackMap = parser.generateTrackPoints();
+
+        Tcx tcx = new Tcx(trackMap);
+
 
         int AVGCadence = 0;
         int AvgHeartRate = 0;
@@ -22,26 +27,11 @@ public class Main {
 
         for (Map.Entry<Integer, TrackPoint> entry : trackMap.entrySet()) {
 
-            if (entry.getValue().getCadence() > 0) {
-                AVGCadence += entry.getValue().getCadence();
-                nonZeroValues++;
-            }
-
-        }
-        for (Map.Entry<Integer, TrackPoint> entry : trackMap.entrySet()) {
-
             AvgHeartRate += entry.getValue().getHeartRate();
 
         }
 
-        for (int i = 1; i < 180; i++) {
-            System.out.println(trackMap.get(i));
-            // METRES / SECONDS
-            float speed = trackMap.get(i).getDistance() / i;
-
-            System.out.println("SPEED : " + speed);
-        }
-
+        System.out.println(tcx.getAverageHeartRate());
 
 
 

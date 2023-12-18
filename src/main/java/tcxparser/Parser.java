@@ -1,6 +1,7 @@
 package tcxparser;
 
 import tcxparser.entity.TrackPoint;
+import tcxparser.interfaces.TCXParser;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -10,18 +11,14 @@ import javax.xml.stream.events.XMLEvent;
 import java.io.File;
 import java.io.FileReader;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 public class Parser implements TCXParser {
 
     private File tcxFile;
-    private String tcxString;
     private TrackPoint trackPoint;
     private HashMap<Integer, TrackPoint> trackPointMap;
     private int index = 0;
-
-    DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
     public Parser(File tcxFile) {
         this.tcxFile = tcxFile;
