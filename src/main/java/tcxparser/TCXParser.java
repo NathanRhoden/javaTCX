@@ -9,9 +9,7 @@ import java.util.HashMap;
 
 public interface TCXParser {
 
-    HashMap<Integer , TrackPoint> generateTrackPoints() throws XMLStreamException, FileNotFoundException;
-
-    HashMap<Integer , TrackPoint> generateTrackPoints(String tcxString);
+    HashMap<Integer, TrackPoint> generateTrackPoints() throws Exception;
 
     boolean validateFile(File file);
 

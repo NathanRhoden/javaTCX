@@ -4,18 +4,16 @@ import tcxparser.entity.TrackPoint;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
-public class TCX implements TCXParser {
+public class Parser implements TCXParser {
 
     private File tcxFile;
     private String tcxString;
@@ -25,26 +23,21 @@ public class TCX implements TCXParser {
 
     DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-    public TCX(File tcxFile) {
+    public Parser(File tcxFile) {
         this.tcxFile = tcxFile;
     }
 
-    public TCX(String tcxString) {
-        this.tcxString = tcxString;
-    }
-
     @Override
-    public HashMap<Integer, TrackPoint> generateTrackPoints(String tcxString) {
-        return null;
-    }
+    public HashMap<Integer, TrackPoint> generateTrackPoints() throws Exception {
 
-    @Override
-    public HashMap<Integer, TrackPoint> generateTrackPoints() throws XMLStreamException, FileNotFoundException {
+        if (!validateFile(tcxFile)) {
+            throw new RuntimeException("Invalid file type");
+        }
 
         trackPointMap = new HashMap<>();
 
-
         XMLInputFactory factory = XMLInputFactory.newInstance();
+
         XMLEventReader eventReader = factory.createXMLEventReader(new FileReader(tcxFile));
 
         while (eventReader.hasNext()) {
@@ -126,6 +119,6 @@ public class TCX implements TCXParser {
 
     @Override
     public boolean validateFile(File file) {
-        return false;
+        return file.getName().endsWith(".tcx");
     }
 }
