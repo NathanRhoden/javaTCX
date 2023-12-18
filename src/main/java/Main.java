@@ -2,9 +2,7 @@ import tcxparser.Parser;
 import tcxparser.Tcx;
 import tcxparser.entity.TrackPoint;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Map;
 
 public class Main {
@@ -31,9 +29,11 @@ public class Main {
 
         }
 
-        System.out.println(tcx.getAverageHeartRate());
-
-
+        System.out.println("Average HeartRate : " + tcx.getAverageHeartRate());
+        System.out.println("Max HeartRate : " +  tcx.getMaxHeartRate());
+        System.out.println("Average Power : " + tcx.getAveragePower());
+        System.out.println("Average Cadence : " + tcx.getAverageCadence());
+        System.out.println("Max Cadence : " + tcx.getMaxCadence());
 
 
     }

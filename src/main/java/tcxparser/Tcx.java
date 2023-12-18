@@ -28,12 +28,29 @@ public class Tcx implements TcxMapOperations {
 
     @Override
     public int getMaxHeartRate() {
-        return 0;
+        int max = Integer.MIN_VALUE;
+
+        for (Entry<Integer, TrackPoint> entry : trackPointEntrySet) {
+            int hr = entry.getValue().getHeartRate();
+            if (hr > max) {
+                max = hr;
+            }
+        }
+        return max;
     }
 
     @Override
     public int getAveragePower() {
-        return 0;
+        int power = 0;
+
+        for (Entry<Integer, TrackPoint> entry : trackPointEntrySet) {
+            int currentPower = entry.getValue().getWatts();
+            power += currentPower;
+
+        }
+
+        return power / trackPointEntrySet.size();
+
     }
 
     @Override
@@ -48,12 +65,34 @@ public class Tcx implements TcxMapOperations {
 
     @Override
     public int getAverageCadence() {
-        return 0;
+        int cadence = 0;
+        int nonZeroMapSize = 0;
+
+        for (Entry<Integer, TrackPoint> entry : trackPointEntrySet) {
+
+            int currentCadence = entry.getValue().getCadence();
+
+            if (currentCadence > 0) {
+                cadence += currentCadence;
+                nonZeroMapSize++;
+            }
+        }
+
+        return cadence / nonZeroMapSize ;
+
     }
 
     @Override
     public int getMaxCadence() {
-        return 0;
+        int max = Integer.MIN_VALUE;
+
+        for (Entry<Integer, TrackPoint> entry : trackPointEntrySet) {
+            int cadence = entry.getValue().getCadence();
+            if (cadence > max) {
+                max = cadence;
+            }
+        }
+        return max;
     }
 
     @Override

@@ -3,8 +3,6 @@ package tcxparser.entity;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-
 
 @Data
 @RequiredArgsConstructor
