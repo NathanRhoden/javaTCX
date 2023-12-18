@@ -5,7 +5,9 @@ import tcxparser.interfaces.TcxMapOperations;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -13,6 +15,8 @@ public class Tcx implements TcxMapOperations {
 
     private Set<Entry<Integer, TrackPoint>> trackPointEntrySet;
     private HashMap<Integer, TrackPoint> trackPointMap;
+
+    private final float toHours = 3600f;
 
     public Tcx(HashMap<Integer, TrackPoint> trackPointMap) {
         this.trackPointMap = trackPointMap;
@@ -104,7 +108,7 @@ public class Tcx implements TcxMapOperations {
 
         float totalDistanceKilometres = getTotalDistance() / 1000f;
         float elapsedTime;
-        float toHours = 3600f;
+
 
         LocalDateTime startTime = trackPointMap.get(0).getTime();
         LocalDateTime totalTime = trackPointMap.get(trackPointMap.size() - 1).getTime();
@@ -117,7 +121,19 @@ public class Tcx implements TcxMapOperations {
 
     @Override
     public float getAverageSpeed(int secondsFrom, int secondsTo) {
-        return 0;
+
+        float totalDistance = 0;
+
+        if(secondsFrom == 0){
+            totalDistance = trackPointMap.get(secondsTo).getDistance();
+        }
+
+        System.out.println(trackPointMap.get(secondsTo).getDistance() + " TOTAL DISTANCE TO ");
+        System.out.println(trackPointMap.get(secondsFrom).getDistance() + " TOTAL DISTANCE FROM");
+
+        System.out.println(totalDistance + " TOTAL DISTANCE");
+
+        return 0f;
     }
 
     @Override

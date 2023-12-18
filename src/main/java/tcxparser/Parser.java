@@ -19,7 +19,6 @@ public class Parser implements TCXParser {
 
     private File tcxFile;
     private TrackPoint trackPoint;
-    private HashMap<Integer, TrackPoint> trackPointMap;
     private int index = 0;
     private final String validStartElement = "TrainingCenterDatabase";
 
@@ -34,7 +33,7 @@ public class Parser implements TCXParser {
             throw new RuntimeException("Invalid file type please use " + validStartElement + " schema");
         }
 
-        trackPointMap = new HashMap<>();
+        HashMap<Integer, TrackPoint> trackPointMap = new HashMap<>();
 
         XMLInputFactory factory = XMLInputFactory.newInstance();
 
