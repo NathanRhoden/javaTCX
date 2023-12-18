@@ -20,6 +20,10 @@ public interface TcxMapOperations {
 
     float getAverageSpeed(int secondsFrom, int secondsTo);
 
-    float getWattsPerKilo(float weight);
+    double getWattsPerKilo(float weight);
+
+    float getTotalDistance();
+
+
 
 }

@@ -3,6 +3,8 @@ package tcxparser;
 import tcxparser.entity.TrackPoint;
 import tcxparser.interfaces.TcxMapOperations;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -10,8 +12,10 @@ import java.util.Set;
 public class Tcx implements TcxMapOperations {
 
     private Set<Entry<Integer, TrackPoint>> trackPointEntrySet;
+    private HashMap<Integer, TrackPoint> trackPointMap;
 
     public Tcx(HashMap<Integer, TrackPoint> trackPointMap) {
+        this.trackPointMap = trackPointMap;
         this.trackPointEntrySet = trackPointMap.entrySet();
     }
 
@@ -78,7 +82,7 @@ public class Tcx implements TcxMapOperations {
             }
         }
 
-        return cadence / nonZeroMapSize ;
+        return cadence / nonZeroMapSize;
 
     }
 
@@ -97,7 +101,18 @@ public class Tcx implements TcxMapOperations {
 
     @Override
     public float getAverageSpeed() {
-        return 0;
+
+        float totalDistanceKilometres = getTotalDistance() / 1000f;
+        float elapsedTime;
+        float toHours = 3600f;
+
+        LocalDateTime startTime = trackPointMap.get(0).getTime();
+        LocalDateTime totalTime = trackPointMap.get(trackPointMap.size() - 1).getTime();
+
+        elapsedTime = startTime.until(totalTime, ChronoUnit.SECONDS) / toHours;
+
+        return totalDistanceKilometres / elapsedTime;
+
     }
 
     @Override
@@ -106,7 +121,22 @@ public class Tcx implements TcxMapOperations {
     }
 
     @Override
-    public float getWattsPerKilo(float weight) {
-        return 0;
+    public double getWattsPerKilo(float weight) {
+
+        return Math.floor((((double) getAveragePower() * 100)) / 100) / weight;
+    }
+
+    @Override
+    public float getTotalDistance() {
+
+        float totalDistance = 0;
+
+        for (Entry<Integer, TrackPoint> entry : trackPointEntrySet) {
+            if (entry.getValue().getDistance() > totalDistance) {
+                totalDistance = entry.getValue().getDistance();
+            }
+        }
+        return totalDistance;
+
     }
 }

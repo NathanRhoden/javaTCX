@@ -11,7 +11,7 @@ public interface TCXParser {
 
     HashMap<Integer, TrackPoint> generateTrackPoints() throws Exception;
 
-    boolean validateFile(File file);
+    boolean validateFile(File file) throws FileNotFoundException, XMLStreamException;
 
 
 }

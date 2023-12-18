@@ -5,10 +5,12 @@ import tcxparser.interfaces.TCXParser;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ public class Parser implements TCXParser {
     private TrackPoint trackPoint;
     private HashMap<Integer, TrackPoint> trackPointMap;
     private int index = 0;
+    private final String validStartElement = "TrainingCenterDatabase";
 
     public Parser(File tcxFile) {
         this.tcxFile = tcxFile;
@@ -28,7 +31,7 @@ public class Parser implements TCXParser {
     public HashMap<Integer, TrackPoint> generateTrackPoints() throws Exception {
 
         if (!validateFile(tcxFile)) {
-            throw new RuntimeException("Invalid file type");
+            throw new RuntimeException("Invalid file type please use " + validStartElement + " schema");
         }
 
         trackPointMap = new HashMap<>();
@@ -115,7 +118,27 @@ public class Parser implements TCXParser {
     }
 
     @Override
-    public boolean validateFile(File file) {
-        return file.getName().endsWith(".tcx");
+    public boolean validateFile(File file) throws FileNotFoundException, XMLStreamException {
+        if (!file.getName().endsWith(".tcx")) {
+            return false;
+        }
+
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+
+        XMLEventReader eventReader = factory.createXMLEventReader(new FileReader(file));
+
+        while (eventReader.hasNext()) {
+            XMLEvent event = eventReader.nextEvent();
+
+            if (event.isStartElement()) {
+                StartElement startElement = event.asStartElement();
+
+                if (startElement.getName().getLocalPart().equals(validStartElement)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
