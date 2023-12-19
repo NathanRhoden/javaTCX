@@ -18,9 +18,12 @@ public class Tcx implements TcxMapOperations {
 
     private final float toHours = 3600f;
 
+    private final int mapSize;
+
     public Tcx(HashMap<Integer, TrackPoint> trackPointMap) {
         this.trackPointMap = trackPointMap;
         this.trackPointEntrySet = trackPointMap.entrySet();
+        this.mapSize = trackPointMap.size();
     }
 
     @Override
@@ -122,18 +125,22 @@ public class Tcx implements TcxMapOperations {
     @Override
     public float getAverageSpeed(int secondsFrom, int secondsTo) {
 
-        float totalDistance = 0;
+        LocalDateTime startTime = trackPointMap.get(secondsFrom).getTime();
+        LocalDateTime totalTime = trackPointMap.get(secondsTo ).getTime();
 
-        if(secondsFrom == 0){
-            totalDistance = trackPointMap.get(secondsTo).getDistance();
-        }
+        float distanceTravelled = Float.sum(trackPointMap.get(secondsTo).getDistance() , - trackPointMap.get(secondsFrom).getDistance())/ 1000f;
 
-        System.out.println(trackPointMap.get(secondsTo).getDistance() + " TOTAL DISTANCE TO ");
-        System.out.println(trackPointMap.get(secondsFrom).getDistance() + " TOTAL DISTANCE FROM");
+        System.out.printf("Distance made : %s   Distance from %s" , trackPointMap.get(secondsTo).getDistance() ,trackPointMap.get(secondsFrom).getDistance() );
 
-        System.out.println(totalDistance + " TOTAL DISTANCE");
+        //ELAPSED TIME IN HOURS
+        float elapsedTime = startTime.until(totalTime, ChronoUnit.SECONDS) / toHours;
 
-        return 0f;
+
+        System.out.println(startTime);
+        System.out.println(totalTime);
+        System.out.println(distanceTravelled + " Distance Travelled");
+
+        return distanceTravelled / elapsedTime;
     }
 
     @Override
@@ -145,14 +152,14 @@ public class Tcx implements TcxMapOperations {
     @Override
     public float getTotalDistance() {
 
-        float totalDistance = 0;
-
-        for (Entry<Integer, TrackPoint> entry : trackPointEntrySet) {
-            if (entry.getValue().getDistance() > totalDistance) {
-                totalDistance = entry.getValue().getDistance();
-            }
-        }
-        return totalDistance;
+      return trackPointMap.get(mapSize - 1).getDistance();
 
     }
+
+    @Override
+    public int getMapSize() {
+        return mapSize;
+    }
+
+
 }

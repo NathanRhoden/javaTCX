@@ -24,6 +24,7 @@ public interface TcxMapOperations {
 
     float getTotalDistance();
 
+    int getMapSize();
 
 
 }

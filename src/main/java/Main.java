@@ -23,7 +23,12 @@ public class Main {
         System.out.println("Watts per Kilo : " + tcx.getWattsPerKilo(108) + " W/KG");
 
          */
-        System.out.println(tcx.getAverageSpeed(0 , 60));
+        System.out.println(tcx.getMapSize());
+        System.out.println(tcx.getAverageSpeed(0 ,7280 ));
+        System.out.println(tcx.getAverageSpeed());
+
+
+
 
 
     }
