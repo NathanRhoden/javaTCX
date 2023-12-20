@@ -118,29 +118,33 @@ public class Tcx implements TcxMapOperations {
 
         elapsedTime = startTime.until(totalTime, ChronoUnit.SECONDS) / toHours;
 
-        return totalDistanceKilometres / elapsedTime;
+        return Math.round(totalDistanceKilometres / elapsedTime);
 
     }
 
     @Override
     public float getAverageSpeed(int secondsFrom, int secondsTo) {
 
-        LocalDateTime startTime = trackPointMap.get(secondsFrom).getTime();
-        LocalDateTime totalTime = trackPointMap.get(secondsTo ).getTime();
+        LocalDateTime startTime;
+        LocalDateTime endTime;
+        float distanceOverInterval;
+        float elapsedTime;
 
-        float distanceTravelled = Float.sum(trackPointMap.get(secondsTo).getDistance() , - trackPointMap.get(secondsFrom).getDistance())/ 1000f;
+        if (secondsTo <= secondsFrom) {
+            throw new RuntimeException("Parameter to must be greater than parameter from");
+        }
 
-        System.out.printf("Distance made : %s   Distance from %s" , trackPointMap.get(secondsTo).getDistance() ,trackPointMap.get(secondsFrom).getDistance() );
+        if (secondsFrom == 0) {
+            elapsedTime = secondsTo / toHours;
+            distanceOverInterval = trackPointMap.get(secondsTo - 1).getDistance() / 1000f;
 
-        //ELAPSED TIME IN HOURS
-        float elapsedTime = startTime.until(totalTime, ChronoUnit.SECONDS) / toHours;
+            //System.out.printf("%s , %s" , elapsedTime , distanceOverInterval);
+
+            return Math.round(distanceOverInterval / elapsedTime);
+        }
 
 
-        System.out.println(startTime);
-        System.out.println(totalTime);
-        System.out.println(distanceTravelled + " Distance Travelled");
-
-        return distanceTravelled / elapsedTime;
+        return 10f;
     }
 
     @Override
@@ -152,7 +156,7 @@ public class Tcx implements TcxMapOperations {
     @Override
     public float getTotalDistance() {
 
-      return trackPointMap.get(mapSize - 1).getDistance();
+        return trackPointMap.get(mapSize - 1).getDistance();
 
     }
 
@@ -161,5 +165,21 @@ public class Tcx implements TcxMapOperations {
         return mapSize;
     }
 
+    @Override
+    public String printBreakdown() {
 
+        return "Average HeartRate : " + getMaxHeartRate() + "\n" +
+                "Max HeartRate : " + getMaxHeartRate() + "\n" +
+                "Average Power : " + getAveragePower() + "\n" +
+                "Average Cadence : " + getAverageCadence() + "\n" +
+                "Max Cadence  : " + getMaxCadence() + "\n" +
+                "Total Distance : " + getTotalDistance() + "\n" +
+                "Average Speed : " + getAverageSpeed();
+
+    }
+
+    @Override
+    public TrackPoint getTrackPointBySecond(int second) {
+        return trackPointMap.get(second);
+    }
 }

@@ -1,5 +1,7 @@
 package tcxparser.interfaces;
 
+import tcxparser.entity.TrackPoint;
+
 public interface TcxMapOperations {
 
     int getAverageHeartRate();
@@ -25,6 +27,10 @@ public interface TcxMapOperations {
     float getTotalDistance();
 
     int getMapSize();
+
+    TrackPoint getTrackPointBySecond(int second);
+
+    String printBreakdown();
 
 
 }
