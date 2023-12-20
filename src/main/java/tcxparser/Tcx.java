@@ -168,13 +168,13 @@ public class Tcx implements TcxMapOperations {
     @Override
     public String printBreakdown() {
 
-        return "Average HeartRate : " + getAverageHeartRate() + "\n" +
-                "Max HeartRate : " + getMaxHeartRate() + "\n" +
-                "Average Power : " + getAveragePower() + "\n" +
-                "Average Cadence : " + getAverageCadence() + "\n" +
-                "Max Cadence  : " + getMaxCadence() + "\n" +
-                "Total Distance : " + getTotalDistance() + "\n" +
-                "Average Speed : " + getAverageSpeed();
+        return "Average HeartRate : " + getAverageHeartRate() +" BPM"+ "\n" +
+                "Max HeartRate : " + getMaxHeartRate() + " BPM"+ "\n" +
+                "Average Power : " + getAveragePower() + " W" + "\n" +
+                "Average Cadence : " + getAverageCadence() + " RPM" + "\n" +
+                "Max Cadence  : " + getMaxCadence() + " RPM"+ "\n" +
+                "Total Distance : " + getTotalDistance() + " KM" + "\n" +
+                "Average Speed : " + getAverageSpeed() + " K/PH";
 
     }
 
