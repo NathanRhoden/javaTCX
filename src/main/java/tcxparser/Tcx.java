@@ -5,20 +5,19 @@ import tcxparser.interfaces.TcxMapOperations;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
 public class Tcx implements TcxMapOperations {
 
-    private Set<Entry<Integer, TrackPoint>> trackPointEntrySet;
-    private HashMap<Integer, TrackPoint> trackPointMap;
+    private final Set<Entry<Integer, TrackPoint>> trackPointEntrySet;
+    private final HashMap<Integer, TrackPoint> trackPointMap;
+    private final int mapSize;
 
     private final float toHours = 3600f;
+    private final float metresToKm = 1000f;
 
-    private final int mapSize;
 
     public Tcx(HashMap<Integer, TrackPoint> trackPointMap) {
         this.trackPointMap = trackPointMap;
@@ -109,42 +108,60 @@ public class Tcx implements TcxMapOperations {
     @Override
     public float getAverageSpeed() {
 
-        float totalDistanceKilometres = getTotalDistance() / 1000f;
+        float totalDistanceKilometres = getTotalDistance();
         float elapsedTime;
 
 
-        LocalDateTime startTime = trackPointMap.get(0).getTime();
-        LocalDateTime totalTime = trackPointMap.get(trackPointMap.size() - 1).getTime();
+        LocalDateTime startTime = getTrackPoint(0).getTime();
+        LocalDateTime totalTime = getTrackPoint(getMapSize() - 1).getTime();
 
         elapsedTime = startTime.until(totalTime, ChronoUnit.SECONDS) / toHours;
 
-        return Math.round(totalDistanceKilometres / elapsedTime);
+
+        return Math.round((totalDistanceKilometres / elapsedTime) * 10f) / 10f;
 
     }
 
     @Override
-    public float getAverageSpeed(int secondsFrom, int secondsTo) {
+    public int getMaxPower() {
+        int MAX = Integer.MIN_VALUE;
 
-        LocalDateTime startTime;
-        LocalDateTime endTime;
+        for (Entry<Integer, TrackPoint> entry : trackPointEntrySet) {
+
+            if (entry.getValue().getWatts() > MAX) {
+                MAX = entry.getValue().getWatts();
+            }
+
+        }
+        return MAX;
+    }
+
+    @Override
+    public double getAverageSpeed(int secondsFrom, int secondsTo) {
+
         float distanceOverInterval;
         float elapsedTime;
 
         if (secondsTo <= secondsFrom) {
-            throw new RuntimeException("Parameter to must be greater than parameter from");
+            throw new RuntimeException("Parameter TO must be greater than parameter FROM");
         }
+
+        LocalDateTime startTime = getTrackPoint(secondsFrom).getTime();
+        LocalDateTime totalTime = getTrackPoint(secondsTo).getTime();
 
         if (secondsFrom == 0) {
-            elapsedTime = secondsTo / toHours;
-            distanceOverInterval = trackPointMap.get(secondsTo - 1).getDistance() / 1000f;
+            elapsedTime = startTime.until(totalTime, ChronoUnit.SECONDS) / toHours;
 
-            //System.out.printf("%s , %s" , elapsedTime , distanceOverInterval);
+            distanceOverInterval = getTrackPoint(secondsTo - 1).getDistance() / metresToKm;
 
-            return Math.round(distanceOverInterval / elapsedTime);
+        } else {
+
+            elapsedTime = (secondsTo - secondsFrom) / toHours;
+            distanceOverInterval = (getTrackPoint(secondsTo - 1).getDistance() - trackPointMap.get(secondsFrom).getDistance()) / metresToKm;
+
         }
+        return Math.round((distanceOverInterval / elapsedTime) * 10.0) / 10.0;
 
-
-        return 10f;
     }
 
     @Override
@@ -156,7 +173,7 @@ public class Tcx implements TcxMapOperations {
     @Override
     public float getTotalDistance() {
 
-        return trackPointMap.get(mapSize - 1).getDistance();
+        return trackPointMap.get(mapSize - 1).getDistance() / metresToKm;
 
     }
 
@@ -168,11 +185,11 @@ public class Tcx implements TcxMapOperations {
     @Override
     public String printBreakdown() {
 
-        return "Average HeartRate : " + getAverageHeartRate() +" BPM"+ "\n" +
-                "Max HeartRate : " + getMaxHeartRate() + " BPM"+ "\n" +
+        return "Average HeartRate : " + getAverageHeartRate() + " BPM" + "\n" +
+                "Max HeartRate : " + getMaxHeartRate() + " BPM" + "\n" +
                 "Average Power : " + getAveragePower() + " W" + "\n" +
                 "Average Cadence : " + getAverageCadence() + " RPM" + "\n" +
-                "Max Cadence  : " + getMaxCadence() + " RPM"+ "\n" +
+                "Max Cadence  : " + getMaxCadence() + " RPM" + "\n" +
                 "Total Distance : " + getTotalDistance() + " KM" + "\n" +
                 "Average Speed : " + getAverageSpeed() + " K/PH";
 
@@ -182,4 +199,9 @@ public class Tcx implements TcxMapOperations {
     public TrackPoint getTrackPointBySecond(int second) {
         return trackPointMap.get(second);
     }
+
+    private TrackPoint getTrackPoint(int point){
+        return trackPointMap.get(point);
+    }
+
 }

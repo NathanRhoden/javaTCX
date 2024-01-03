@@ -10,6 +10,8 @@ public interface TcxMapOperations {
 
     int getAveragePower();
 
+    int getMaxPower();
+
     int getNormalisedPower();
 
     int getAverageWeightedPower();
@@ -20,7 +22,7 @@ public interface TcxMapOperations {
 
     float getAverageSpeed();
 
-    float getAverageSpeed(int secondsFrom, int secondsTo);
+    double getAverageSpeed(int secondsFrom, int secondsTo);
 
     double getWattsPerKilo(float weight);
 

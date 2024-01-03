@@ -6,13 +6,16 @@ import java.io.File;
 public class Main {
     public static void main(String[] args) throws Exception {
 
-        File endurance = new File("src/main/resources/Endurance_2.tcx");
+        File endurance = new File("src/main/resources/constant.tcx");
 
         Parser parser = new Parser(endurance);
 
         Tcx tcx = new Tcx(parser.generateTrackPoints());
 
-        System.out.println(tcx.printBreakdown());
+        tcx.getMaxPower();
+
+
+
 
     }
 }
