@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class TrackPoint {
 
     private float latitude;

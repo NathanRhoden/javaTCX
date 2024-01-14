@@ -12,9 +12,7 @@ public interface TcxMapOperations {
 
     int getMaxPower();
 
-    int getNormalisedPower();
-
-    int getAverageWeightedPower();
+    double getNormalisedPower();
 
     int getAverageCadence();
 

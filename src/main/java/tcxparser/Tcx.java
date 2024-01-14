@@ -64,13 +64,39 @@ public class Tcx implements TcxMapOperations {
     }
 
     @Override
-    public int getNormalisedPower() {
-        return 0;
-    }
+    public double getNormalisedPower() {
 
-    @Override
-    public int getAverageWeightedPower() {
-        return 0;
+        if(mapSize < 30){
+            throw new RuntimeException("There must be atleast 30 trackpoints");
+        }
+
+        //REMOVE THE 30 ENDPOINTS FROM THE DATA
+        double[] powerData = new double[mapSize];
+        double window = 30;
+        int reducedDataSetSize = (int) (mapSize - (window - 1));
+        double[] movingAverage = new double[reducedDataSetSize];
+
+        for (int i = 0; i < mapSize; i++) {
+            powerData[i] = getTrackPoint(i).getWatts();
+        }
+
+        for(int k = 0 ;  k < movingAverage.length ; k++){
+            int counter = 0 ;
+            int average = 0 ;
+
+            while(counter < window){
+                average += powerData[k + counter];
+                counter++;
+            }
+            movingAverage[k] = Math.round(average / window);
+        }
+
+        for (int j = 0; j < movingAverage.length; j++) {
+            movingAverage[j] = Math.pow(movingAverage[j], 4d);
+        }
+
+        return Math.round(Math.pow(getAverage(movingAverage), 0.25d));
+
     }
 
     @Override
@@ -200,8 +226,16 @@ public class Tcx implements TcxMapOperations {
         return trackPointMap.get(second);
     }
 
-    private TrackPoint getTrackPoint(int point){
+    private TrackPoint getTrackPoint(int point) {
         return trackPointMap.get(point);
     }
 
+    double getAverage(double[] array) {
+        double sum = 0;
+        for (double i : array) {
+            sum += i;
+        }
+
+        return sum / array.length;
+    }
 }
