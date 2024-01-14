@@ -1,4 +1,4 @@
-package tcxparser;
+package tcxparser.interfaces;
 
 import tcxparser.entity.TrackPoint;
 
@@ -11,7 +11,7 @@ public interface TCXParser {
 
     HashMap<Integer, TrackPoint> generateTrackPoints() throws Exception;
 
-    boolean validateFile(File file);
+    boolean validateFile(File file) throws FileNotFoundException, XMLStreamException;
 
 
 }

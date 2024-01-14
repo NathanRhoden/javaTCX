@@ -1,0 +1,41 @@
+package tcxparser;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import tcxparser.interfaces.TcxMapOperations;
+
+import java.io.File;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TcxTest {
+
+    Parser testParcer = new Parser(new File("src/main/resources/tteffort.tcx"));
+    Tcx testTcx = new Tcx(testParcer.generateTrackPoints());
+
+    TcxTest() throws Exception {
+    }
+
+
+    @Test
+    void get_MaxPower_should_equal_346() {
+        assertEquals(346, testTcx.getMaxPower());
+    }
+
+    @Test
+    void get_MaxHeartRate_should_equal_190() {
+        assertEquals(176, testTcx.getMaxHeartRate());
+    }
+
+    @Test
+    void get_NormalisedPower_should_equal_261() {
+        assertEquals(261, testTcx.getNormalisedPower());
+    }
+
+    @Test
+    void get_MaxCadence_should_equal_97() {
+        assertEquals(97, testTcx.getMaxCadence());
+    }
+
+
+}
