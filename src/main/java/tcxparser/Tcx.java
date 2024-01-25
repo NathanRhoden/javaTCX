@@ -1,5 +1,6 @@
 package tcxparser;
 
+import org.decimal4j.util.DoubleRounder;
 import tcxparser.entity.TrackPoint;
 import tcxparser.interfaces.TcxMapOperations;
 
@@ -132,7 +133,7 @@ public class Tcx implements TcxMapOperations {
     }
 
     @Override
-    public float getAverageSpeed() {
+    public double getAverageSpeed() {
 
         float totalDistanceKilometres = getTotalDistance();
         float elapsedTime;
@@ -144,7 +145,7 @@ public class Tcx implements TcxMapOperations {
         elapsedTime = startTime.until(totalTime, ChronoUnit.SECONDS) / toHours;
 
 
-        return Math.round((totalDistanceKilometres / elapsedTime) * 10f) / 10f;
+        return DoubleRounder.round((totalDistanceKilometres / elapsedTime) , 1);
 
     }
 
@@ -186,7 +187,7 @@ public class Tcx implements TcxMapOperations {
             distanceOverInterval = (getTrackPoint(secondsTo - 1).getDistance() - trackPointMap.get(secondsFrom).getDistance()) / metresToKm;
 
         }
-        return Math.round((distanceOverInterval / elapsedTime) * 10.0) / 10.0;
+        return DoubleRounder.round((distanceOverInterval / elapsedTime) , 1);
 
     }
 

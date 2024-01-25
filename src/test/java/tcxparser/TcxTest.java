@@ -37,5 +37,14 @@ class TcxTest {
         assertEquals(97, testTcx.getMaxCadence());
     }
 
+    @Test
+    void get_AverageSpeed_should_equal_36_point_one(){
+        assertEquals(36.1 , testTcx.getAverageSpeed());
+    }
+
+    @Test
+    void get_AverageSpeed_should_equal_36_point_one_over_ActivePeriod(){
+        assertEquals(36.1 , testTcx.getAverageSpeed(0 , testTcx.getMapSize() -1));
+    }
 
 }

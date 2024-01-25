@@ -18,7 +18,7 @@ public interface TcxMapOperations {
 
     int getMaxCadence();
 
-    float getAverageSpeed();
+    double getAverageSpeed();
 
     double getAverageSpeed(int secondsFrom, int secondsTo);
 
