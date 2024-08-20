@@ -10,8 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TcxTest {
 
-    Parser testParcer = new Parser(new File("src/main/resources/tteffort.tcx"));
-    Tcx testTcx = new Tcx(testParcer.generateTrackPoints());
+    Tcx testTcx = new Tcx(new File("src/main/resources/tteffort.tcx"));
 
     TcxTest() throws Exception {
     }

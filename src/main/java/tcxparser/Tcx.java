@@ -1,9 +1,11 @@
 package tcxparser;
 
+import lombok.SneakyThrows;
 import org.decimal4j.util.DoubleRounder;
 import tcxparser.entity.TrackPoint;
 import tcxparser.interfaces.TcxMapOperations;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -20,8 +22,10 @@ public class Tcx implements TcxMapOperations {
     private final float metresToKm = 1000f;
 
 
-    public Tcx(HashMap<Integer, TrackPoint> trackPointMap) {
-        this.trackPointMap = trackPointMap;
+    @SneakyThrows
+    public Tcx(File tcxFile ) {
+        Parser parser = new Parser(tcxFile);
+        trackPointMap = parser.generateTrackPoints();
         this.trackPointEntrySet = trackPointMap.entrySet();
         this.mapSize = trackPointMap.size();
     }

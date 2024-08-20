@@ -1,8 +1,6 @@
 package tcxparser;
-
 import tcxparser.entity.TrackPoint;
 import tcxparser.interfaces.TCXParser;
-
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
